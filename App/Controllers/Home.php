@@ -1,9 +1,10 @@
 <?php
     class Home extends Controller{
         public function Index($name = ''){
-            $user = $this->model('User');
+            $user = $this->Model('User');
             $user->name = $name;
-            echo $user->name;
+            
+            $this->View('Home/index', ['name' => $user->name]);
         }
     }
 ?>
