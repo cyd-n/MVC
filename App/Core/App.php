@@ -18,7 +18,9 @@
 
                 $this->controller = new $this->controller;
 
-                if(isset($url[1]) || isset($method)){
+                $methode_name = strtolower($url[0]);
+
+                if(isset($methode_name) || isset($method)){
                     if(method_exists($this->controller, $url[1])){
                         $this->method = $url[1];
                         unset($url[1]);
