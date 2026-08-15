@@ -3,359 +3,413 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>404 — SIGNAL LOST</title>
+<title>404 — Lost Beyond the Styx</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#060505;
-    --ink:#c7c2b8;
-    --blood:#6b0f0f;
-    --blood-bright:#c22a2a;
-    --sick:#35402f;
-    --x:50%;
-    --y:50%;
+    --night:#05090a;
+    --night-2:#02040a;
+    --marble:#d9dcd2;
+    --stygian:#23413b;
+    --stygian-bright:#6fae9c;
+    --gold:#b98d3e;
+    --gold-bright:#e6bd6d;
   }
 
   *{box-sizing:border-box;}
-
   html,body{
-    margin:0;
-    padding:0;
-    width:100%;
-    height:100%;
-    background:var(--bg);
+    margin:0; padding:0;
+    width:100%; height:100%;
+    background:var(--night);
     overflow:hidden;
     cursor:none;
   }
-
   body{
-    font-family:'IBM Plex Mono', monospace;
-    color:var(--ink);
+    font-family:'EB Garamond', serif;
+    color:var(--marble);
   }
 
-  .stage{
-    position:relative;
-    width:100vw;
-    height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+  .sky{
+    position:fixed; inset:0;
+    background:radial-gradient(ellipse at 50% 30%, #0c1a18 0%, var(--night) 55%, var(--night-2) 100%);
+    z-index:0;
   }
-
-  /* ---------- hidden scene (revealed by flashlight) ---------- */
-  .scene{
-    position:absolute;
-    inset:0;
+  .fog{
+    position:fixed; inset:0;
+    z-index:1;
     background:
-      radial-gradient(ellipse at 20% 30%, rgba(53,64,47,0.12), transparent 40%),
-      radial-gradient(ellipse at 80% 75%, rgba(107,15,15,0.10), transparent 45%),
-      #08070a;
+      radial-gradient(ellipse 60% 30% at 20% 85%, rgba(111,174,156,0.10), transparent 60%),
+      radial-gradient(ellipse 50% 25% at 80% 90%, rgba(111,174,156,0.08), transparent 60%);
+    animation:fogDrift 22s ease-in-out infinite alternate;
+  }
+  @keyframes fogDrift{
+    0%{ transform:translateX(-3%); }
+    100%{ transform:translateX(3%); }
   }
 
-  .figure{
+  .river{
+    position:fixed;
+    left:0; right:0; bottom:0;
+    height:22vh;
+    z-index:2;
+    background:linear-gradient(180deg, transparent, rgba(35,65,59,0.55) 40%, rgba(10,20,18,0.9));
+  }
+  .river svg{ position:absolute; bottom:0; width:100%; height:60px; opacity:0.5; }
+
+  /* ---------------- hidden scene (revealed by lantern) ---------------- */
+  .scene{
+    position:fixed; inset:0;
+    z-index:3;
+  }
+
+  .shade{
     position:absolute;
-    width:90px;
-    filter:blur(0.2px);
+    width:70px;
+    opacity:0.85;
+    filter:blur(0.3px);
+  }
+  .shade svg{ width:100%; display:block; }
+  .shade.s1{ left:14%; bottom:14%; width:90px; }
+  .shade.s2{ right:18%; bottom:20%; width:60px; }
+  .shade.s3{ left:48%; bottom:10%; width:50px; opacity:0.7; }
+
+  .boat{
+    position:absolute;
+    bottom:9%;
+    left:-140px;
+    width:120px;
+    opacity:0.9;
+    animation:drift 34s linear infinite;
+  }
+  @keyframes drift{
+    0%{ left:-140px; }
+    100%{ left:110%; }
+  }
+
+  .cerberus{
+    position:absolute;
+    right:6%;
+    bottom:12%;
+    width:100px;
     opacity:0.9;
   }
-  .figure svg{ width:100%; display:block; }
-  .figure.f1{ left:6%; bottom:0; width:120px; }
-  .figure.f2{ right:9%; top:10%; width:70px; transform:scaleY(1.1); }
-  .figure.f3{ left:46%; top:6%; width:50px; opacity:0.75; }
-
-  .eye{
-    fill:var(--blood-bright);
+  .cerberus .eye{
+    fill:var(--gold-bright);
+    animation:eyeGlow 2.6s ease-in-out infinite;
+  }
+  @keyframes eyeGlow{
+    0%,100%{ opacity:0.5; }
+    50%{ opacity:1; }
   }
 
   .whisper{
     position:absolute;
-    font-family:'Special Elite', cursive;
-    color:var(--blood-bright);
-    font-size:13px;
-    letter-spacing:2px;
-    opacity:0.8;
-    text-shadow:0 0 6px rgba(194,42,42,0.6);
+    font-family:'EB Garamond', serif;
+    font-style:italic;
+    color:var(--stygian-bright);
+    font-size:14px;
+    letter-spacing:1px;
+    opacity:0.75;
   }
-  .whisper.w1{ top:22%; left:12%; }
-  .whisper.w2{ bottom:16%; right:14%; }
-  .whisper.w3{ top:60%; left:60%; }
+  .whisper.w1{ top:24%; left:10%; }
+  .whisper.w2{ bottom:30%; right:12%; }
+  .whisper.w3{ top:56%; left:58%; }
 
-  /* ---------- darkness overlay with flashlight cutout ---------- */
+  /* ---------------- lantern darkness overlay ---------------- */
   .dark{
-    position:absolute;
-    inset:0;
-    background:#020202;
-    -webkit-mask-image: radial-gradient(circle at var(--x) var(--y), transparent 0px, transparent 60px, rgba(0,0,0,0.55) 130px, black 230px);
-    mask-image: radial-gradient(circle at var(--x) var(--y), transparent 0px, transparent 60px, rgba(0,0,0,0.55) 130px, black 230px);
-    transition:mask-image 60ms linear;
+    position:fixed; inset:0;
+    background:#010202;
+    -webkit-mask-image: radial-gradient(circle at var(--x) var(--y), transparent 0px, transparent 70px, rgba(0,0,0,0.55) 150px, black 260px);
+    mask-image: radial-gradient(circle at var(--x) var(--y), transparent 0px, transparent 70px, rgba(0,0,0,0.55) 150px, black 260px);
     z-index:5;
   }
 
-  .flicker-dark{
-    animation:beamFlicker 6.3s infinite steps(1);
-  }
-  @keyframes beamFlicker{
-    0%,96%,100%{ filter:brightness(1); }
-    97%{ filter:brightness(0.4); }
-    98%{ filter:brightness(1.3); }
-    99%{ filter:brightness(0.2); }
-  }
-
-  /* ---------- main content ---------- */
-  .content{
+  /* ---------------- content ---------------- */
+  .stage{
     position:relative;
     z-index:10;
+    width:100vw; height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
     text-align:center;
-    padding:0 24px;
+    padding:24px;
     pointer-events:none;
   }
-
-  .timecode{
-    position:fixed;
-    top:22px;
-    left:28px;
-    font-size:12px;
-    letter-spacing:1px;
-    color:var(--ink);
-    opacity:0.75;
-    z-index:20;
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  .rec-dot{
-    width:8px;height:8px;border-radius:50%;
-    background:var(--blood-bright);
-    animation:blink 1.1s infinite;
-    box-shadow:0 0 6px var(--blood-bright);
-  }
-  @keyframes blink{ 0%,45%{opacity:1;} 50%,95%{opacity:0.15;} 100%{opacity:1;} }
 
   .eyebrow{
-    font-family:'Special Elite', cursive;
+    font-family:'Cinzel', serif;
     font-size:12px;
     letter-spacing:5px;
-    color:var(--blood-bright);
-    opacity:0.85;
-    margin-bottom:18px;
+    color:var(--stygian-bright);
+    margin-bottom:24px;
   }
 
-  h1{
-    font-family:'Special Elite', cursive;
-    font-size:clamp(90px, 20vw, 200px);
-    line-height:0.9;
-    margin:0;
+  .arch-wrap{
     position:relative;
-    letter-spacing:4px;
-    color:var(--ink);
-    text-shadow:0 0 30px rgba(0,0,0,0.8);
+    width:170px;
+    margin-bottom:22px;
+  }
+  .arch{
+    width:100%;
+    height:170px;
+    border-radius:85px 85px 4px 4px;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(111,174,156,0.18), transparent 65%),
+      linear-gradient(180deg, #14201d, #060a09);
+    border:2px solid #1c2b27;
+    box-shadow:inset 0 0 40px rgba(0,0,0,0.8);
+    position:relative;
+  }
+  .arch::after{
+    content:'';
+    position:absolute;
+    inset:16px;
+    border-radius:70px 70px 3px 3px;
+    background:radial-gradient(ellipse at 50% 100%, rgba(111,174,156,0.12), transparent 70%);
   }
 
-  h1 .glitch-layer{
+  .seal{
     position:absolute;
-    inset:0;
-    left:0; top:0; width:100%;
-    pointer-events:none;
+    top:-8px; left:50%;
+    transform:translate(-50%,-50%) scale(0.4) rotate(-4deg);
+    width:96px; height:96px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #1a2622, #0a0d0c 75%);
+    border:3px solid var(--gold);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    opacity:0;
+    animation:sealRise 700ms 500ms cubic-bezier(.2,1.4,.4,1) forwards;
+  }
+  @keyframes sealRise{
+    0%{ opacity:0; transform:translate(-50%,-50%) scale(0.2) rotate(-4deg); }
+    70%{ opacity:1; transform:translate(-50%,-50%) scale(1.06) rotate(-4deg); box-shadow:0 0 24px 4px rgba(111,174,156,0.4); }
+    100%{ opacity:1; transform:translate(-50%,-50%) scale(1) rotate(-4deg); box-shadow:0 0 10px 2px rgba(111,174,156,0.2); }
+  }
+  .seal .code{
+    font-family:'Cinzel', serif;
+    font-weight:700;
+    font-size:24px;
+    color:var(--stygian-bright);
+    letter-spacing:1px;
+  }
+  .seal .label{
+    font-family:'Cinzel', serif;
+    font-size:6px;
+    letter-spacing:1.5px;
+    color:var(--gold-bright);
+    margin-top:2px;
   }
 
-  .glitching h1{
-    animation:jitter 140ms steps(2) 1;
-  }
-  .glitching h1::before,
-  .glitching h1::after{
-    content:'404';
+  .chthonic{
     position:absolute;
-    inset:0;
-    animation:none;
+    top:50%; left:50%;
+    width:1px; height:1px;
   }
-  .glitching h1::before{
-    color:var(--blood-bright);
-    transform:translate(3px,0);
-    clip-path:inset(20% 0 55% 0);
-    mix-blend-mode:screen;
+  .medallion{
+    position:absolute;
+    top:0; left:0;
+    width:24px; height:24px;
+    transform:
+      rotate(calc(var(--i) * 90deg + 45deg))
+      translate(96px)
+      rotate(calc(var(--i) * -90deg - 45deg))
+      translate(-12px,-12px);
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #16211d, #080b0a 80%);
+    border:1px solid rgba(111,174,156,0.5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
-  .glitching h1::after{
-    color:var(--sick);
-    transform:translate(-3px,0);
-    clip-path:inset(60% 0 10% 0);
-    mix-blend-mode:screen;
-  }
-  @keyframes jitter{
-    0%{ transform:translate(0,0); }
-    30%{ transform:translate(-2px,1px); }
-    60%{ transform:translate(2px,-1px); }
-    100%{ transform:translate(0,0); }
-  }
+  .medallion svg{ width:13px; height:13px; }
 
   .subtitle{
+    margin-top:20px;
+    font-family:'Cinzel', serif;
     font-size:14px;
     letter-spacing:3px;
-    color:var(--ink);
-    opacity:0.65;
-    margin-top:18px;
+    opacity:0.9;
   }
-
   .desc{
     max-width:440px;
-    margin:26px auto 0;
-    font-size:13px;
+    margin:20px auto 0;
+    font-size:16px;
+    font-style:italic;
     line-height:1.7;
-    color:var(--ink);
+    opacity:0.75;
+  }
+  .allowed{
+    margin-top:12px;
+    font-size:13px;
+    letter-spacing:1px;
     opacity:0.55;
   }
 
   .btn{
     pointer-events:auto;
     display:inline-block;
-    margin-top:38px;
+    margin-top:32px;
     padding:14px 32px;
     background:transparent;
-    border:1px solid rgba(199,194,184,0.35);
-    color:var(--ink);
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
+    border:1px solid rgba(111,174,156,0.5);
+    color:var(--stygian-bright);
+    font-family:'Cinzel', serif;
+    font-size:11px;
     letter-spacing:3px;
     text-decoration:none;
     text-transform:uppercase;
-    transition:border-color 200ms ease, color 200ms ease;
-    position:relative;
+    transition:border-color 200ms ease, background 200ms ease, box-shadow 200ms ease;
   }
   .btn:hover{
-    border-color:var(--blood-bright);
-    color:var(--blood-bright);
-    animation:btnGlitch 260ms steps(2) infinite;
-  }
-  @keyframes btnGlitch{
-    0%{ transform:translate(0,0); }
-    50%{ transform:translate(1px,-1px); }
-    100%{ transform:translate(-1px,0); }
+    border-color:var(--stygian-bright);
+    background:rgba(111,174,156,0.08);
+    box-shadow:0 0 16px rgba(111,174,156,0.3);
   }
   .btn:focus-visible{
-    outline:2px solid var(--blood-bright);
+    outline:2px solid var(--stygian-bright);
     outline-offset:3px;
   }
 
-  /* ---------- scanlines + vignette ---------- */
-  .scanlines{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    z-index:30;
-    background:repeating-linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.18) 0px,
-      rgba(0,0,0,0.18) 1px,
-      transparent 2px,
-      transparent 3px
-    );
-    mix-blend-mode:overlay;
-  }
-  .vignette{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    z-index:31;
-    box-shadow: inset 0 0 200px 60px rgba(0,0,0,0.9);
+  .footnote{
+    margin-top:16px;
+    font-size:12px;
+    letter-spacing:1px;
+    opacity:0.4;
+    font-style:italic;
   }
 
-  canvas#static{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    pointer-events:none;
-    z-index:32;
-    opacity:0.05;
-    mix-blend-mode:overlay;
-  }
-
-  /* custom flashlight cursor dot */
   .cursor-dot{
     position:fixed;
-    width:6px;height:6px;
+    width:6px; height:6px;
     border-radius:50%;
-    background:rgba(199,194,184,0.8);
+    background:var(--stygian-bright);
     transform:translate(-50%,-50%);
     pointer-events:none;
     z-index:40;
-    box-shadow:0 0 10px 3px rgba(199,194,184,0.5);
+    box-shadow:0 0 12px 4px rgba(111,174,156,0.6);
+  }
+
+  .vignette{
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:31;
+    box-shadow: inset 0 0 220px 70px rgba(0,0,0,0.9);
   }
 
   @media (max-width:600px){
-    .desc{ font-size:12px; padding:0 10px; }
-    .timecode{ font-size:10px; top:14px; left:14px; }
+    .chthonic{ display:none; }
+    .desc{ font-size:14px; }
+    .arch-wrap{ width:130px; }
+    .arch{ height:130px; }
   }
 
   @media (prefers-reduced-motion: reduce){
-    .rec-dot, .glitching h1, .btn:hover, .flicker-dark{ animation:none !important; }
-    canvas#static{ display:none; }
+    .fog, .boat, .cerberus .eye, .seal{ animation:none; }
+    .seal{ opacity:1; transform:translate(-50%,-50%) scale(1) rotate(-4deg); }
+    .dark{ mask-image:none; -webkit-mask-image:none; opacity:0.15; }
   }
 </style>
 </head>
 <body>
 
+<div class="sky"></div>
+<div class="fog"></div>
+
+<div class="scene">
+  <div class="shade s1">
+    <svg viewBox="0 0 60 140" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="30" cy="20" rx="12" ry="15" fill="rgba(217,220,210,0.35)"/>
+      <path d="M12,32 Q30,26 48,32 L54,130 Q30,142 6,130 Z" fill="rgba(217,220,210,0.22)"/>
+    </svg>
+  </div>
+  <div class="shade s2">
+    <svg viewBox="0 0 60 140" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="30" cy="20" rx="12" ry="15" fill="rgba(217,220,210,0.3)"/>
+      <path d="M12,32 Q30,26 48,32 L54,130 Q30,142 6,130 Z" fill="rgba(217,220,210,0.18)"/>
+    </svg>
+  </div>
+  <div class="shade s3">
+    <svg viewBox="0 0 60 140" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="30" cy="20" rx="12" ry="15" fill="rgba(217,220,210,0.28)"/>
+      <path d="M12,32 Q30,26 48,32 L54,130 Q30,142 6,130 Z" fill="rgba(217,220,210,0.16)"/>
+    </svg>
+  </div>
+
+  <div class="boat">
+    <svg viewBox="0 0 140 70" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5,50 Q70,70 135,50 L120,58 Q70,66 20,58 Z" fill="#0e1614"/>
+      <rect x="66" y="14" width="3" height="38" fill="#0e1614"/>
+      <ellipse cx="67" cy="10" rx="9" ry="11" fill="rgba(111,174,156,0.35)"/>
+      <path d="M50,16 Q66,8 84,16 L86,40 Q66,48 48,40 Z" fill="rgba(111,174,156,0.18)"/>
+    </svg>
+  </div>
+
+  <div class="cerberus">
+    <svg viewBox="0 0 140 90" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="35" cy="45" r="22" fill="#0a0e0c"/>
+      <circle cx="70" cy="35" r="26" fill="#0a0e0c"/>
+      <circle cx="105" cy="45" r="22" fill="#0a0e0c"/>
+      <polygon points="20,28 28,10 36,28" fill="#0a0e0c"/>
+      <polygon points="55,18 63,2 71,18" fill="#0a0e0c"/>
+      <polygon points="69,18 77,2 85,18" fill="#0a0e0c"/>
+      <polygon points="90,28 98,10 106,28" fill="#0a0e0c"/>
+      <circle class="eye" cx="29" cy="43" r="2"/>
+      <circle class="eye" cx="41" cy="43" r="2"/>
+      <circle class="eye" cx="64" cy="33" r="2"/>
+      <circle class="eye" cx="76" cy="33" r="2"/>
+      <circle class="eye" cx="99" cy="43" r="2"/>
+      <circle class="eye" cx="111" cy="43" r="2"/>
+    </svg>
+  </div>
+
+  <div class="whisper w1">no one returns</div>
+  <div class="whisper w2">it fell in the river</div>
+  <div class="whisper w3">the ferryman remembers you</div>
+</div>
+
+<div class="river">
+  <svg viewBox="0 0 1000 60" preserveAspectRatio="none">
+    <path d="M0,30 Q250,10 500,30 T1000,30 V60 H0 Z" fill="var(--stygian)"/>
+  </svg>
+</div>
+
+<div class="dark" id="dark"></div>
+
 <div class="stage">
-  <div class="scene">
-    <div class="figure f1">
-      <svg viewBox="0 0 100 220" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="50" cy="26" rx="17" ry="21" fill="#000"/>
-        <path d="M22,46 Q50,40 78,46 L84,190 Q50,208 16,190 Z" fill="#000"/>
-        <circle class="eye" cx="42" cy="24" r="2.2"/>
-        <circle class="eye" cx="58" cy="24" r="2.2"/>
-      </svg>
-    </div>
-    <div class="figure f2">
-      <svg viewBox="0 0 100 220" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="50" cy="26" rx="17" ry="21" fill="#000"/>
-        <path d="M22,46 Q50,40 78,46 L84,190 Q50,208 16,190 Z" fill="#000"/>
-        <circle class="eye" cx="43" cy="25" r="2"/>
-        <circle class="eye" cx="57" cy="25" r="2"/>
-      </svg>
-    </div>
-    <div class="figure f3">
-      <svg viewBox="0 0 100 220" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="50" cy="26" rx="17" ry="21" fill="#000"/>
-        <path d="M22,46 Q50,40 78,46 L84,190 Q50,208 16,190 Z" fill="#000"/>
-        <circle class="eye" cx="44" cy="25" r="1.6"/>
-        <circle class="eye" cx="56" cy="25" r="1.6"/>
-      </svg>
-    </div>
+  <div class="eyebrow">LOST BEYOND THE STYX</div>
 
-    <div class="whisper w1">it saw you first</div>
-    <div class="whisper w2">stop looking</div>
-    <div class="whisper w3">go back</div>
+  <div class="arch-wrap">
+    <div class="arch"></div>
+    <div class="seal">
+      <span class="code">404</span>
+      <span class="label">NOT FOUND</span>
+    </div>
+    <div class="chthonic" id="chthonic"></div>
   </div>
 
-  <div class="dark flicker-dark" id="dark"></div>
+  <div class="subtitle">THIS PAGE HAS CROSSED THE RIVER</div>
+  <p class="desc">What you're looking for isn't on this side anymore. Charon carried it across, and whatever crosses the Styx does not come back the way it went.</p>
+  <p class="allowed">You may still return, while you can.</p>
 
-  <div class="content">
-    <div class="eyebrow">SIGNAL INTERRUPTED</div>
-    <h1 id="glitchTitle">404</h1>
-    <div class="subtitle">THIS PAGE WAS TAKEN</div>
-    <p class="desc">The page you're looking for isn't here anymore. Something moved it, or moved through it. Whichever way you came from — go back the same way.</p>
-    <a href="/" class="btn">Return to safety</a>
-  </div>
+  <a href="/" class="btn">Pay the ferryman, go back</a>
+  <div class="footnote">οὐδεὶς ἐπιστρέφει — no one returns</div>
 </div>
 
-<div class="scanlines"></div>
 <div class="vignette"></div>
-<canvas id="static"></canvas>
 <div class="cursor-dot" id="cursorDot"></div>
-
-<div class="timecode">
-  <span class="rec-dot"></span>
-  <span id="tc">REC 00:00:00</span>
-</div>
 
 <script>
 (function(){
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var dark = document.getElementById('dark');
-  var dot = document.getElementById('cursorDot');
   var root = document.documentElement;
+  var dot = document.getElementById('cursorDot');
 
-  // flashlight follows pointer
   var targetX = window.innerWidth/2, targetY = window.innerHeight/2;
   var curX = targetX, curY = targetY;
 
@@ -371,8 +425,8 @@
   });
 
   function raf(){
-    curX += (targetX - curX) * 0.18;
-    curY += (targetY - curY) * 0.18;
+    curX += (targetX - curX) * 0.16;
+    curY += (targetY - curY) * 0.16;
     root.style.setProperty('--x', curX + 'px');
     root.style.setProperty('--y', curY + 'px');
     dot.style.left = targetX + 'px';
@@ -381,56 +435,25 @@
   }
   raf();
 
-  // glitch the 404 title at random intervals
-  var title = document.getElementById('glitchTitle').parentElement;
-  function scheduleGlitch(){
-    var delay = 2200 + Math.random()*4200;
-    setTimeout(function(){
-      if(!reduced){
-        title.classList.add('glitching');
-        setTimeout(function(){ title.classList.remove('glitching'); }, 160);
-      }
-      scheduleGlitch();
-    }, delay);
-  }
-  if(!reduced) scheduleGlitch();
-
-  // fake VHS timecode counter
-  var seconds = 0;
-  var tc = document.getElementById('tc');
-  setInterval(function(){
-    seconds++;
-    var h = String(Math.floor(seconds/3600)).padStart(2,'0');
-    var m = String(Math.floor((seconds%3600)/60)).padStart(2,'0');
-    var s = String(seconds%60).padStart(2,'0');
-    tc.textContent = 'REC ' + h + ':' + m + ':' + s;
-  }, 1000);
-
-  // subtle static noise
-  if(!reduced){
-    var canvas = document.getElementById('static');
-    var ctx = canvas.getContext('2d');
-    function resize(){
-      canvas.width = window.innerWidth * 0.25;
-      canvas.height = window.innerHeight * 0.25;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    function drawStatic(){
-      var w = canvas.width, h = canvas.height;
-      var imgData = ctx.createImageData(w, h);
-      for(var i=0; i<imgData.data.length; i+=4){
-        var v = Math.random() * 255;
-        imgData.data[i] = v;
-        imgData.data[i+1] = v;
-        imgData.data[i+2] = v;
-        imgData.data[i+3] = 255;
-      }
-      ctx.putImageData(imgData, 0, 0);
-    }
-    setInterval(drawStatic, 120);
-  }
+  // the four chthonic figures ringed around the seal
+  var figures = [
+    // Hades - bident
+    '<g stroke="var(--gold-bright)" stroke-width="1.3" fill="none"><line x1="12" y1="4" x2="12" y2="21"/><path d="M8,4 Q8,9 12,9 Q16,9 16,4"/></g>',
+    // Persephone - pomegranate
+    '<g><circle cx="12" cy="13" r="7" fill="var(--gold-bright)"/><polygon points="12,4 9,7 15,7" fill="var(--gold-bright)"/></g>',
+    // Charon - oar
+    '<g stroke="var(--gold-bright)" stroke-width="1.3" fill="none"><line x1="12" y1="3" x2="12" y2="21"/><ellipse cx="12" cy="6" rx="5" ry="2.4"/></g>',
+    // Cerberus - three heads
+    '<g fill="var(--gold-bright)"><circle cx="7" cy="14" r="3.4"/><circle cx="12" cy="10" r="4"/><circle cx="17" cy="14" r="3.4"/></g>'
+  ];
+  var ring = document.getElementById('chthonic');
+  figures.forEach(function(svgInner, idx){
+    var m = document.createElement('div');
+    m.className = 'medallion';
+    m.style.setProperty('--i', idx);
+    m.innerHTML = '<svg viewBox="0 0 24 24">' + svgInner + '</svg>';
+    ring.appendChild(m);
+  });
 })();
 </script>
 
