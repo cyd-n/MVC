@@ -22,13 +22,31 @@
                     if(method_exists($this->controller, $url[1])){
                         $this->method = $url[1];
                         unset($url[1]);
-                    } else if(method_exists($this->controller, $method)){ }
+                    } else if(method_exists($this->controller, $method) && $url[1] == null){ 
+                        // skip
+                    } else {
+                        if (file_exists('../App/Controllers/ErrorController.php')) {
+                            $this->controller = 'ErrorController';
+
+                            require_once '../App/Controllers/' . $this->controller . '.php';
+
+                            $this->controller = new $this->controller;
+
+                            if (method_exists($this->controller, '_405')) {
+                                $this->method = '_405';
+                            }
+
+                            call_user_func_array([$this->controller, $this->method], []);
+                        } else {
+                            echo "Error 405";
+                        }
+                    }
                 }
 
                 $this->params = $url ? array_values($url) : [];
 
                 call_user_func_array([$this->controller, $this->method], $this->params);
-            } else {
+            } else { // Enter the 404 Error
                 if (file_exists('../App/Controllers/ErrorController.php')) {
                     $this->controller = 'ErrorController';
 
