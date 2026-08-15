@@ -171,5 +171,72 @@
             echo "ERROR 451 - UNAVAILABLE FOR LEGAL REASONS";
             echo '<a href="/" class="btn">UGH!!!</a>';
         }
+
+    // ERROR 500
+        public function _500(){ // Internal Server Error
+            //$this->View('Error/_500);
+            echo "ERROR 500 - INTERNAL SERVER ERROR";
+            echo '<a href="/" class="btn">UGH!!!</a>';
+        }
+
+        public function _501(){ // Not Implemented
+            //$this->View('Error/_501);
+            echo "ERROR 501 - NOT IMPLEMENTED";
+            echo '<a href="/" class="btn">UGH!!!</a>';
+        }
+
+        public function _502(){ // Bad Gateway
+            //$this->View('Error/_502);
+            echo "ERROR 502 - BAD GATEWAY";
+            echo '<a href="/" class="btn">UGH!!!</a>';
+        }
+
+        public function _503(){ // Service Unavailable
+            //$this->View('Error/_503);
+            echo "ERROR 503 - SERVICE UNAVAILABLE";
+            echo '<a href="/" class="btn">UGH!!!</a>';
+        }
+
+        public function _504(){ // Gateway Timeout
+            //$this->View('Error/_504);
+            echo "ERROR 504 - GATEWAY TIMEOUT";
+            echo '<a href="/" class="btn">UGH!!!</a>';
+        }
+
+        public function _505(){ // HTTP Version Not Supported
+            //$this->View('Error/_505);
+            echo "ERROR 505 - HTTP VERSION NOT SUPPORTED";
+            echo '<a href="/" class="btn">UGH!!!</a>';
+        }
+
+        public function _506(){ // Variant Also Negotiates
+            //$this->View('Error/_506);
+            echo "ERROR 506 - VARIANT ALSO NEGOTIATES";
+            echo '<a href="/" class="btn">UGH!!!</a>';
+        }
+
+        public function _507(){ // Insufficient Storage
+            //$this->View('Error/_507);
+            echo "ERROR 507 - INSUFFICIENT STORAGE";
+            echo '<a href="/" class="btn">UGH!!!</a>';
+        }
+
+        public function _508(){ // Loop Detected 
+            //$this->View('Error/_508);
+            echo "ERROR 508 - LOOP DETECTED";
+            echo '<a href="/" class="btn">UGH!!!</a>';
+        }
+
+        public function _510(){ // Not Extended
+            //$this->View('Error/_510);
+            echo "ERROR 507 - NOT EXTENDED";
+            echo '<a href="/" class="btn">UGH!!!</a>';
+        }
+
+        public function _511(){ // Network Authentication Required
+            //$this->View('Error/_511);
+            echo "ERROR 511 - NETWORK AUTHENTICATION REQUIRED";
+            echo '<a href="/" class="btn">UGH!!!</a>';
+        }
     }
 ?>
