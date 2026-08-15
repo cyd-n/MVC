@@ -8,6 +8,7 @@
         }
 
         public function View($view, $data = []){
+            require_once '../App/Templates/Header.php';
             require_once '../App/Views/' . $view . '.php';
         }
     }

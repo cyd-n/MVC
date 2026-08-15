@@ -18,13 +18,13 @@
 
                 $this->controller = new $this->controller;
 
-                $methode_name = strtolower($url[0]);
+                $methode_name = strtolower($url[1]);
 
                 if(isset($methode_name) || isset($method)){
-                    if(method_exists($this->controller, $url[1])){
-                        $this->method = $url[1];
+                    if(method_exists($this->controller, $methode_name)){
+                        $this->method = $methode_name;
                         unset($url[1]);
-                    } else if(method_exists($this->controller, $method) && $url[1] == null){ 
+                    } else if(method_exists($this->controller, $this->method) && $url[1] == null){ 
                         // skip
                     } else {
                         if (file_exists('../App/Controllers/ErrorController.php')) {
