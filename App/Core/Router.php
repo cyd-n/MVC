@@ -1,16 +1,48 @@
 <?php
-    Class App {
+    Class Router {
         protected $controller = 'Home';
         protected $method = 'index';
 
         protected $params = [];
 
-        public function __construct(){
-            require_once '../App/Core/Router.php';
-            $router = new Router;
-            $router->Get("/Test", "Home@Index", []);
-            $router->ReqeustMethode();
+        protected $urls = [];
 
+        public function Get($url, $controller, $param = []){
+            $this->Methode("GET", $url, $controller, $param);
+        }
+
+        public function Post($url, $controller, $param = []){
+            $this->Methode("POST", $url, $controller, $param);
+        }
+
+        public function Put($url, $controller, $param = []){
+            $this->Methode("PUT", $url, $controller, $param);
+        }
+
+        public function Delete($url, $controller, $param = []){
+            $this->Methode("DELETE", $url, $controller, $param);
+        }
+
+        protected function Methode($methode, $url, $controller, $param = []){
+            $this->urls[] = ["Methode" => $methode, "Url" => $url, "Handler" => $controller];
+        }
+
+        public function ReqeustMethode(){
+            $method = $_SERVER['REQUEST_METHOD'];
+
+            if ($method === 'GET') {
+                echo "GET";
+            } elseif ($method === 'POST') {
+                // POST request
+            } elseif ($method === 'PUT') {
+                // PUT request
+            } elseif ($method === 'DELETE') {
+                // DELETE request
+            }
+        }
+
+
+       /* public function __construct(){
            $url = $this->parseUrl();
 
             if(file_exists('../App/Controllers/' . $url[0] . '.php') || $url[0] == null){
@@ -76,5 +108,5 @@
             if(isset($_GET['url'])) {
                 return $url = explode('/',filter_var(rtrim($_GET['url'], '/'), FILTER_SANITIZE_URL));
             }
-        }
+        } */
     }
