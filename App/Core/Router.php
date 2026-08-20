@@ -37,21 +37,25 @@
 
                         if($url['Url'] == $getUrl) {
                             $this->SetController($url['Handler']);
+                            return;
                         }
-                    }
+                    } 
                 }
+                $this->Error404();
+
             } elseif ($method === 'POST') {
                 // POST request
             } elseif ($method === 'PUT') {
                 // PUT request
             } elseif ($method === 'DELETE') {
                 // DELETE request
+            } else {
+                $this->Error404();
             }
         }
 
         public function SetController($controller = ""){
            $url = $this->ParseUrl($controller);
-
            if(file_exists('../App/Controllers/' . $url[0] . '.php') || $url[0].trim() == ""){
                 if(file_exists('../App/Controllers/' . $url[0] . '.php')){
                     $this->controller = $url[0];
