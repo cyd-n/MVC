@@ -30,17 +30,28 @@
         public function ReqeustMethode(){ // need to be able to use params
             $method = $_SERVER['REQUEST_METHOD'];
 
-            foreach($this->urls as $url){
-                if($url['Methode'] == $method){
-                    $requestUrl = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            if ($method === 'GET') {
+                foreach($this->urls as $url){
+                    if($url['Methode'] == $method){
+                        $getUrl = '/' . $_GET['url'];
 
-                    if($url['Url'] == $requestUrl) {
-                        $this->SetController($url['Handler']);
-                        return;
-                    }
-                } 
+                        if($url['Url'] == $getUrl) {
+                            $this->SetController($url['Handler']);
+                            return;
+                        }
+                    } 
+                }
+                $this->Error404();
+
+            } elseif ($method === 'POST') {
+                // POST request
+            } elseif ($method === 'PUT') {
+                // PUT request
+            } elseif ($method === 'DELETE') {
+                // DELETE request
+            } else {
+                $this->Error404();
             }
-            $this->Error404();
         }
 
         public function SetController($controller = ""){
