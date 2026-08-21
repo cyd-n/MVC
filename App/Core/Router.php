@@ -139,9 +139,9 @@
             require_once '../App/Core/Logger.php';
 
             switch($type){
-                case "404": $errorMessage = "Page Not Found";
-                case "405": $errorMessage = "Methode Not Allowed";
-                default: "";
+                case "404": $errorMessage = "Page Not Found"; break;
+                case "405": $errorMessage = "Methode Not Allowed"; break;
+                default: ""; break;
             }
 
             $logger = new Logger;
