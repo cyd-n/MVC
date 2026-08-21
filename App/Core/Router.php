@@ -98,7 +98,7 @@
 
         private function Error404($message = ""){
             http_response_code(404);
-            ErrorWriter("404", $message);
+            $this->ErrorWriter("404", $message);
             if (file_exists('../App/Controllers/ErrorController.php')) {
                 $this->controller = 'ErrorController';
 
@@ -119,7 +119,7 @@
 
         private function Error405($message = ""){
             http_response_code(405);
-            ErrorWriter("405", $message);
+            $this->ErrorWriter("405", $message);
             if (file_exists('../App/Controllers/ErrorController.php')) {
                 $this->controller = 'ErrorController';
 
@@ -147,6 +147,6 @@
             }
 
             $logger = new Logger;
-            $logger->Write("Error/", "Error-" . $type . '"' . $errorMessage . '"' . ": " . $message);
+            $logger->Write("Error.txt", "Error-" . $type . '"' . $errorMessage . '"' . ": " . $message);
         }
     }
