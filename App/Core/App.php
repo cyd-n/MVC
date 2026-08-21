@@ -17,11 +17,10 @@
         }
     }
 
-    // 
-
+    // Thing i need to add
     // Composer = Honestly, the single highest-leverage change: composer init, add PSR-4 autoloading, and pull in vlucas/phpdotenv for config. That alone modernizes a lot of the pain points above with almost no framework rewrite.
 
-    // URL parameter extraction = This is the gap your own comment already flagged. Right now if someone visits /Home/index/Alice, there's no clean way to get Alice into the controller. You'd want your router to support something like /hello/{name} and pull the value out of the actual URL segments — not from the Home@Index handler string like it does now.
+    // URL parameter extraction =  Right now if someone visits /Home/index/Alice, there's no clean way to get Alice into the controller. You'd want your router to support something like /hello/{name} and pull the value out of the actual URL segments — not from the Home@Index handler string like it does now.
 
     // A real Model.php = It's currently just two comment lines. This is your biggest functional gap — no database connection exists anywhere. Add a PDO connection wrapped in a base Model class that User (and future models) can extend, so you can actually query data instead of hardcoding $name = "Hank".
 
@@ -29,7 +28,7 @@
 
     // Composer + namespacing = Right now everything is global classes with manual require_once calls using hardcoded relative paths ('../App/Controllers/') — that's fragile if the app is ever invoked from a different working directory. Composer's PSR-4 autoloading fixes both: no more manual requires, and paths resolve correctly regardless of cwd.
 
-    // Uncaught error handling = You've built beautiful themed pages for 404/405/418 etc. — but there's currently no safety net for a plain PHP exception or fatal error (e.g. a bug in a controller). set_exception_handler() + set_error_handler() would route any crash through your existing ErrorController (maybe a generic _500) instead of a raw PHP error dump.
+    // Uncaught error handling =  but there's currently no safety net for a plain PHP exception or fatal error (e.g. a bug in a controller). set_exception_handler() + set_error_handler() would route any crash through your existing ErrorController (maybe a generic _500) instead of a raw PHP error dump.
 
     // mall polish items I noticed while testing: = Controller::View()'s footer check tests file_exists($view) twice instead of checking Footer.php exists — works by accident, but the logic reads wrong. App/Views/Home/index.php echoes $data['name'] — wait, actually in your version it's $data['name'] but Controller::View() calls extract()-less inclusion, so $data isn't defined; double check that variable is actually reaching the view (worth testing with a var_dump if you haven't rendered it yet).
 
@@ -57,3 +56,4 @@
 
     // Database migrations = Right now if you change your schema, it's manual SQL. A migrations system — versioned files like 2026_08_20_create_users_table.php, each with an up()/down(), tracked in a migrations table — means your schema evolves in git alongside your code instead of living only in someone's head (or a .sql dump nobody updates).
 
+    // Seeders / test data = Paired with migrations — a way to populate the DB with fake data for local dev (php console seed), so you're not manually inserting rows every time you wipe your database.
