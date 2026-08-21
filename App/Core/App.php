@@ -28,8 +28,6 @@
 
     // A real Model.php = It's currently just two comment lines. This is your biggest functional gap — no database connection exists anywhere. Add a PDO connection wrapped in a base Model class that User (and future models) can extend, so you can actually query data instead of hardcoding $name = "Hank".
 
-    // Config / .env = DB credentials, a debug toggle, base URL — none of that has anywhere to live yet. A tiny config file (or .env loader) beats hardcoding values into classes later.
-
     // Composer + namespacing = Right now everything is global classes with manual require_once calls using hardcoded relative paths ('../App/Controllers/') — that's fragile if the app is ever invoked from a different working directory. Composer's PSR-4 autoloading fixes both: no more manual requires, and paths resolve correctly regardless of cwd.
 
     // Uncaught error handling =  but there's currently no safety net for a plain PHP exception or fatal error (e.g. a bug in a controller). set_exception_handler() + set_error_handler() would route any crash through your existing ErrorController (maybe a generic _500) instead of a raw PHP error dump.
@@ -61,3 +59,5 @@
     // Database migrations = Right now if you change your schema, it's manual SQL. A migrations system — versioned files like 2026_08_20_create_users_table.php, each with an up()/down(), tracked in a migrations table — means your schema evolves in git alongside your code instead of living only in someone's head (or a .sql dump nobody updates).
 
     // Seeders / test data = Paired with migrations — a way to populate the DB with fake data for local dev (php console seed), so you're not manually inserting rows every time you wipe your database.
+
+    // Model relationships = Once you have more than one table, you'll want User::posts() returning that user's posts, or Post::author() returning the user who wrote it — basic hasMany/belongsTo helpers on your Model base class save you from hand-writing the same JOIN logic repeatedly.

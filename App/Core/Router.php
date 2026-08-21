@@ -52,7 +52,7 @@
                 } 
             }
             
-            $this->Error404("The Reqeusted Page do not exist check if you have set router on 'App/Core/App.php' on line 12");
+            $this->Error404("The Reqeusted Page do not exist check if you have set the right controller in router on 'App/Core/App.php' on line 12");
         }
 
         public function SetController($controller = ""){
