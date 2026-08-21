@@ -86,6 +86,7 @@
         } 
 
         private function Error404(){
+            http_response_code(404);
             if (file_exists('../App/Controllers/ErrorController.php')) {
                 $this->controller = 'ErrorController';
 
@@ -104,6 +105,7 @@
         }
 
         private function Error405(){
+            http_response_code(405);
             if (file_exists('../App/Controllers/ErrorController.php')) {
                 $this->controller = 'ErrorController';
 
