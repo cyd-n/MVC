@@ -48,11 +48,11 @@
                         return;
                     }
                 } else{
-                    $this->Error405();
+                    $this->Error405("The Reqeusted Methode is not That same as set Reqeusted Methode");
                 } 
             }
             
-            $this->Error404();
+            $this->Error404("The Reqeusted Page do not exist check if you have set router on 'App/Core/App.php' on line 12");
         }
 
         public function SetController($controller = ""){
@@ -76,7 +76,7 @@
                     } else if(method_exists($this->controller, $this->method) && $url[1] == null){ 
                         // skip
                     } else {
-                        $this->Error405();
+                        $this->Error405("The Reqeusted Methode is not Allowed check if you the methode exis on line 12, if thet in the controll and that you set the right methode on router on 'App/Core/App.php' on line 12 or maybe you use a Other Reqeust Methode then writing in controller or you use a Reqeust methode that in not allowed that allowed once are: GET,POST, PUT, DELETE'");
                     }
                 }
 
@@ -84,7 +84,7 @@
 
                 call_user_func_array([$this->controller, $this->method], $this->params);
             } else { // Enter the 404 Error
-                $this->Error404();
+                $this->Error404("The Reqeusted Page do not exist, Make a controller named $url[0]");
             } 
         }
 
@@ -96,8 +96,9 @@
             return "";
         } 
 
-        private function Error404(){
+        private function Error404($message = ""){
             http_response_code(404);
+            ErrorWriter("404", $message);
             if (file_exists('../App/Controllers/ErrorController.php')) {
                 $this->controller = 'ErrorController';
 
@@ -116,8 +117,9 @@
             
         }
 
-        private function Error405(){
+        private function Error405($message = ""){
             http_response_code(405);
+            ErrorWriter("405", $message);
             if (file_exists('../App/Controllers/ErrorController.php')) {
                 $this->controller = 'ErrorController';
 
@@ -133,5 +135,18 @@
             } else {
                 die("404: methode not allowed");
             }
+        }
+
+        private function ErrorWriter($type, $message){
+            require_once '../App/Core/Logger.php';
+
+            switch($type){
+                case "404": $errorMessage = "Page Not Found";
+                case "405": $errorMessage = "Methode Not Allowed";
+                default: "";
+            }
+
+            $logger = new Logger;
+            $logger->Write("Error/", "Error-" . $type . '"' . $errorMessage . '"' . ": " . $message);
         }
     }
