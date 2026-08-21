@@ -38,6 +38,8 @@
                         $this->SetController($url['Handler']);
                         return;
                     }
+                } else{
+                    $this->Error405();
                 } 
             }
             
@@ -100,8 +102,9 @@
 
                 call_user_func_array([$this->controller, $this->method], []);
             } else {
-                echo "Error 404";
+                die("404: page not found");
             }
+            
         }
 
         private function Error405(){
@@ -119,7 +122,7 @@
 
                 call_user_func_array([$this->controller, $this->method], []);
             } else {
-                echo "Error 405";
+                die("404: methode not allowed");
             }
         }
     }
