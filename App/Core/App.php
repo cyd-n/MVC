@@ -6,6 +6,8 @@
         protected $params = [];
 
         public function __construct(){
+            session_start();
+
             require_once '../App/Core/Router.php';
 
             $router = new Router;
@@ -15,7 +17,7 @@
         }
     }
 
-    // Flash messages & sessions = Common need after redirects ("Saved successfully!") — a tiny Session helper class pays for itself fast./ Nothing in your app touches $_SESSION right now. Once you have forms or auth, you'll want a small Session helper (set, get, and specifically "flash" values that survive exactly one redirect — e.g. "Saved successfully!").
+    // 
 
     // Composer = Honestly, the single highest-leverage change: composer init, add PSR-4 autoloading, and pull in vlucas/phpdotenv for config. That alone modernizes a lot of the pain points above with almost no framework rewrite.
 
