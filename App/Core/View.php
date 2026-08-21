@@ -1,1 +1,0 @@
-// Render data whenn the control send data the model send to the controller

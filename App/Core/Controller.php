@@ -16,7 +16,7 @@
                 require_once '../App/Views/' . $view . '.php';
             }
 
-            if(file_exists('../App/Views/Templates/Footer.php')){
+            if(file_exists('../App/Templates/Footer.php')){
                 require_once '../App/Templates/Footer.php';
             }
         }
