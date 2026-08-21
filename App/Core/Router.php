@@ -7,24 +7,24 @@
 
         protected $urls = [];
 
-        public function Get($url, $controller, $param = []){
-            $this->Methode("GET", $url, $controller, $param);
+        public function Get($url, $controller, $param = [], $middleware = []){
+            $this->Methode("GET", $url, $controller, $param, $middleware);
         }
 
-        public function Post($url, $controller, $param = []){
-            $this->Methode("POST", $url, $controller, $param);
+        public function Post($url, $controller, $param = [], $middleware = []){
+            $this->Methode("POST", $url, $controller, $param, $middleware);
         }
 
-        public function Put($url, $controller, $param = []){
-            $this->Methode("PUT", $url, $controller, $param);
+        public function Put($url, $controller, $param = [], $middleware = []){
+            $this->Methode("PUT", $url, $controller, $param, $middleware);
         }
 
-        public function Delete($url, $controller, $param = []){
-            $this->Methode("DELETE", $url, $controller, $param);
+        public function Delete($url, $controller, $param = [], $middleware = []){
+            $this->Methode("DELETE", $url, $controller, $param, $middleware);
         }
 
-        protected function Methode($methode, $url, $controller, $param = []){
-            $this->urls[] = ["Methode" => $methode, "Url" => $url, "Handler" => $controller];
+        protected function Methode($methode, $url, $controller, $param = [], $middleware = []){
+            $this->urls[] = ["Methode" => $methode, "Url" => $url, "Handler" => $controller, "Middleware" => $middleware];
         }
 
         public function ReqeustMethode(){ // need to be able to use params
@@ -35,6 +35,15 @@
                     $requestUrl = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
                     if($url['Url'] == $requestUrl) {
+                        foreach($url['Middleware'] as $middleware){
+                            if(file_exists('../App/Middleware/' . $middleware . '.php')){
+                                require_once '../App/Middleware/' . $middleware . '.php';
+
+                                $middlewareObj = new $middleware();
+
+                                $middlewareObj->Handle();
+                            }
+                        }
                         $this->SetController($url['Handler']);
                         return;
                     }

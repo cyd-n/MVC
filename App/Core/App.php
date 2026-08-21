@@ -8,17 +8,13 @@
         public function __construct(){
             require_once '../App/Core/Router.php';
             $router = new Router;
-            $router->Get("/Home", "Home@Index", []);
-            $router->Get("/About", "About@Index", []);
+            $router->Get("/Home", "Home@Index", [], []);
+            $router->Get("/About", "About@Index", [], []);
             $router->ReqeustMethode();
         }
     }
 
-    // MiddleWare = Useful for auth checks, CSRF validation, logging — run before the controller action fires./  You've got the route table structure already (Methode, Url, Handler, and now Param too) — a natural next slot is a Middleware array per route. Before call_user_func_array runs the controller, loop through and run each one; if any of them blocks (e.g. no session), stop before reaching the controller. First one to build: an Auth middleware that checks for a logged-in user and redirects to a login page.
-
     // Flash messages & sessions = Common need after redirects ("Saved successfully!") — a tiny Session helper class pays for itself fast./ Nothing in your app touches $_SESSION right now. Once you have forms or auth, you'll want a small Session helper (set, get, and specifically "flash" values that survive exactly one redirect — e.g. "Saved successfully!").
-
-    // Error/exception handling = Wrap the whole request lifecycle in try/catch, and register a global exception handler that shows a nice error page in production and a stack trace in dev.
 
     // Composer = Honestly, the single highest-leverage change: composer init, add PSR-4 autoloading, and pull in vlucas/phpdotenv for config. That alone modernizes a lot of the pain points above with almost no framework rewrite.
 
@@ -54,5 +50,7 @@
 
     // Tests = Nothing here is currently testable in an automated way. Once Composer's in place, pulling in PHPUnit and writing even a handful of tests for your Router's matching logic would've caught both bugs I found earlier automatically, instead of needing manual curl testing.
 
+    // A dependency container / service locator = As the app grows, controllers will need more than just models — a mailer, a logger, an HTTP client. Instead of new-ing everything by hand everywhere, a tiny container ($container->get('mailer')) that knows how to build each service once and hand it out keeps construction logic in one place.
 
+    // Database migrations = Right now if you change your schema, it's manual SQL. A migrations system — versioned files like 2026_08_20_create_users_table.php, each with an up()/down(), tracked in a migrations table — means your schema evolves in git alongside your code instead of living only in someone's head (or a .sql dump nobody updates).
 
