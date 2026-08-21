@@ -47,8 +47,6 @@
                         $this->SetController($url['Handler']);
                         return;
                     }
-                } else{
-                    $this->Error405("The Reqeusted Methode is not That same as set Reqeusted Methode");
                 } 
             }
             

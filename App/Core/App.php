@@ -61,3 +61,19 @@
     // Seeders / test data = Paired with migrations — a way to populate the DB with fake data for local dev (php console seed), so you're not manually inserting rows every time you wipe your database.
 
     // Model relationships = Once you have more than one table, you'll want User::posts() returning that user's posts, or Post::author() returning the user who wrote it — basic hasMany/belongsTo helpers on your Model base class save you from hand-writing the same JOIN logic repeatedly.
+
+    // Pagination = Any list view (users, posts, whatever) eventually needs "page 2 of 40" instead of dumping every row. A small paginate($page, $perPage) helper on the query side, plus a reusable "prev/next" view partial.
+
+    // File uploads = Handling $_FILES safely — validating type/size, generating safe filenames, moving to a storage directory (or later, S3) — is common enough to be worth a small Storage helper rather than rewriting it per feature.
+
+    // Mailer = A wrapper around mail() or an SMTP library, with a Mailer::send('welcome', $user, $data) style API using view templates for the email body — same idea as your HTML views, just for emails.
+
+    // Console commands = A tiny CLI entry point (php console migrate, php console seed, php console make:controller) — even just a switch on $argv[1] — makes recurring dev tasks one command instead of manual file surgery.
+
+    // Caching layer = Even a dead-simple file-based cache (Cache::remember('key', 3600, fn() => expensiveQuery())) avoids re-running the same expensive query on every request once you have real data.
+
+    // Environment-based config switching = Right now debug mode is one flag — but dev vs. staging vs. production usually need different DB hosts, mail settings, etc. A config system that loads different values based on an APP_ENV value (rather than just APP_DEBUG true/false) scales better.
+
+    // Route caching = Once you have a lot of routes, rebuilding that regex table on every single request has a cost. Precompiling the route table to a plain PHP array file (regenerated only when routes change) is a classic framework optimization.
+
+    // A debug toolbar = A small bar injected at the bottom of the page in dev mode showing request time, memory used, number of DB queries run — genuinely useful for catching accidental N+1 query bugs before they hit production.
