@@ -1,6 +1,10 @@
 <?php
     class Logger{
         public function Write($dir = "", $message = ""){
-            file_put_contents('../App/Logs/' . $dir, $message);
+            require_once '../App/Core/Env.php';
+
+            if(Env::Get('DEBUG')){
+                file_put_contents('../Logs/' . $dir, $message);
+            }
         }
     }

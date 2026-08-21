@@ -8,6 +8,10 @@
         public function __construct(){
             session_start();
 
+            require_once '../App/Core/Env.php';
+
+            Env::load();
+
             require_once '../App/Core/Router.php';
 
             $router = new Router;
@@ -44,7 +48,7 @@
 
     // JSON/API responses = If you ever want an endpoint that returns data instead of HTML, add a json($data) helper on Controller that sets the right content-type header and encodes the response — cleaner than manually calling header() + json_encode() in every method that needs it.
 
-    // Logging = Beyond just error logging — a simple Logger class for app events (failed logins, important actions) that writes to a file with timestamps. Useful for debugging things that aren't crashes.
+    // Logging = a simple Logger class for app events (failed logins, important actions) that writes to a file with timestamps. Useful for debugging things that aren't crashes.
 
     // Security headers = A few lines in your bootstrap (Content-Security-Policy, X-Frame-Options, X-Content-Type-Options) cost nothing and close off a bunch of common attack classes for free.
 

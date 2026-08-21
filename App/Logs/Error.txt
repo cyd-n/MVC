@@ -1,1 +1,0 @@
-Error-404"Methode Not Allowed": The Reqeusted Page do not exist check if you have set router on 'App/Core/App.php' on line 12
